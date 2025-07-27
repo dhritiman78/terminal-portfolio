@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const App = () => {
+const Terminal = () => {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPath, setCurrentPath] = useState('~');
+  const [commandHistory, setCommandHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
@@ -117,12 +119,18 @@ const App = () => {
       return `
 ╔═══════════════════════════════════╗
 ║                                   ║
-║    ██╗  ██╗ █████╗ ██╗     ██╗    ║
-║    ██║ ██╔╝██╔══██╗██║     ██║    ║
-║    █████╔╝ ███████║██║     ██║    ║
-║    ██╔═██╗ ██╔══██║██║     ██║    ║
-║    ██║  ██╗██║  ██║███████╗██║    ║
-║    ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝    ║
+║ ██████╗ ██╗  ██╗██████╗ ██╗████████╗
+║ ██╔══██╗██║  ██║██╔══██╗██║╚══██╔══╝
+║ ██║  ██║███████║██████╔╝██║   ██║   
+║ ██║  ██║██╔══██║██╔══██╗██║   ██║   
+║ ██████╔╝██║  ██║██║  ██║██║   ██║   
+║ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝   ╚═╝   
+║ ██╗███╗   ███╗ █████╗ ███╗   ██╗    
+║ ██║████╗ ████║██╔══██╗████╗  ██║    
+║ ██║██╔████╔██║███████║██╔██╗ ██║    
+║ ██║██║╚██╔╝██║██╔══██║██║╚██╗██║    
+║ ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║    
+║ ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝    
 ║                                   ║
 ║    Dhritiman's Portfolio Terminal ║
 ║       Penetration Testing Mode    ║
@@ -141,12 +149,12 @@ Type 'help' for available tools.
     return `
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
-║    ██╗  ██╗ █████╗ ██╗     ██╗    ██╗     ██╗███╗   ██╗██╗   ║
-║    ██║ ██╔╝██╔══██╗██║     ██║    ██║     ██║████╗  ██║██║   ║
-║    █████╔╝ ███████║██║     ██║    ██║     ██║██╔██╗ ██║██║   ║
-║    ██╔═██╗ ██╔══██║██║     ██║    ██║     ██║██║╚██╗██║██║   ║
-║    ██║  ██╗██║  ██║███████╗██║    ███████╗██║██║ ╚████║██║   ║
-║    ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝    ╚══════╝╚═╝╚═╝  ╚═══╝╚═╝   ║
+║ ██████╗ ██╗  ██╗██████╗ ██╗████████╗██╗███╗   ███╗ █████╗ ███╗   ██╗
+║ ██╔══██╗██║  ██║██╔══██╗██║╚══██╔══╝██║████╗ ████║██╔══██╗████╗  ██║
+║ ██║  ██║███████║██████╔╝██║   ██║   ██║██╔████╔██║███████║██╔██╗ ██║
+║ ██║  ██║██╔══██║██╔══██╗██║   ██║   ██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+║ ██████╔╝██║  ██║██║  ██║██║   ██║   ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
+║ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝   ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
 ║                                                               ║
 ║              Welcome to Dhritiman's Portfolio Terminal        ║
 ║                     Penetration Testing Mode                 ║
@@ -215,7 +223,7 @@ Available Commands (Exploitation Tools):
         return `
 ╭─ TARGET PROFILE ──────────────────╮
 │                                   │
-│  ${about.substring(0, 80)}...
+│  ${about}
 │                                   │
 │  Status: Active Developer         │
 │  Location: Assam, India           │
@@ -240,18 +248,18 @@ Available Commands (Exploitation Tools):
     education: () => {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       let output = isMobile ? `
-╭─ EDUCATION ───────────────────────╮
-│                                   │` : `
+╭─ EDUCATION ─────────────────────────────╮
+│                                         │` : `
 ╭─ EDUCATIONAL BACKGROUND ─────────────────────────────────────────╮
 │                                                                  │`;
       
       education.forEach(edu => {
         if (isMobile) {
           output += `
-│  🎓 ${edu.degree.length > 25 ? edu.degree.substring(0, 25) + '...' : edu.degree}
+│  🎓 ${edu.degree}
 │     ${edu.institution}
 │     ${edu.year} - ${edu.cgpa || edu.percentage}
-│                                   │`;
+│                                         │`;
         } else {
           output += `
 │  🎓 ${edu.degree}
@@ -263,7 +271,7 @@ Available Commands (Exploitation Tools):
       });
       
       output += isMobile ? `
-╰───────────────────────────────────╯` : `
+╰─────────────────────────────────────────╯` : `
 ╰──────────────────────────────────────────────────────────────────╯`;
       return output;
     },
@@ -271,20 +279,20 @@ Available Commands (Exploitation Tools):
     experience: () => {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       let output = isMobile ? `
-╭─ EXPERIENCE ──────────────────────╮
-│                                   │` : `
+╭─ EXPERIENCE ────────────────────────────╮
+│                                         │` : `
 ╭─ WORK EXPERIENCE ────────────────────────────────────────────────╮
 │                                                                  │`;
       
       experience.forEach(exp => {
         if (isMobile) {
           output += `
-│  💼 ${exp.title.length > 20 ? exp.title.substring(0, 20) + '...' : exp.title}
+│  💼 ${exp.title}
 │     ${exp.company}
 │     ${exp.period}
 │     
-│     ${exp.description.substring(0, 60)}...
-│                                   │`;
+│     ${exp.description}
+│                                         │`;
         } else {
           output += `
 │  💼 ${exp.title}
@@ -298,7 +306,7 @@ Available Commands (Exploitation Tools):
       });
       
       output += isMobile ? `
-╰───────────────────────────────────╯` : `
+╰─────────────────────────────────────────╯` : `
 ╰──────────────────────────────────────────────────────────────────╯`;
       return output;
     },
@@ -306,8 +314,8 @@ Available Commands (Exploitation Tools):
     projects: () => {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       let output = isMobile ? `
-╭─ PROJECTS ────────────────────────╮
-│                                   │` : `
+╭─ PROJECTS ──────────────────────────────╮
+│                                         │` : `
 ╭─ PROJECT PORTFOLIO ──────────────────────────────────────────────╮
 │                                                                  │`;
       
@@ -315,11 +323,11 @@ Available Commands (Exploitation Tools):
         if (isMobile) {
           output += `
 │  🚀 ${project.title} (${project.date})
-│     ${project.description.substring(0, 50)}...
+│     ${project.description}
 │     
-│     Tech: ${project.tech.substring(0, 25)}...
-│     ${project.link.substring(0, 30)}...
-│                                   │`;
+│     Tech: ${project.tech}
+│     Link: ${project.link}
+│                                         │`;
         } else {
           output += `
 │  🚀 ${project.title} (${project.date})
@@ -332,7 +340,7 @@ Available Commands (Exploitation Tools):
       });
       
       output += isMobile ? `
-╰───────────────────────────────────╯` : `
+╰─────────────────────────────────────────╯` : `
 ╰──────────────────────────────────────────────────────────────────╯`;
       return output;
     },
@@ -340,8 +348,8 @@ Available Commands (Exploitation Tools):
     skills: () => {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       let output = isMobile ? `
-╭─ SKILLS ──────────────────────────╮
-│                                   │` : `
+╭─ SKILLS ────────────────────────────────╮
+│                                         │` : `
 ╭─ TECHNICAL ARSENAL ──────────────────────────────────────────────╮
 │                                                                  │`;
       
@@ -349,7 +357,7 @@ Available Commands (Exploitation Tools):
         if (isMobile) {
           output += `
 │  ⚡ ${category}: 
-│     ${skillList.length > 25 ? skillList.substring(0, 25) + '...' : skillList}`;
+│     ${skillList}`;
         } else {
           output += `
 │  ⚡ ${category}: ${skillList}`;
@@ -357,10 +365,10 @@ Available Commands (Exploitation Tools):
       });
       
       output += isMobile ? `
-│                                   │
-│  * = elementary proficiency       │
-│                                   │
-╰───────────────────────────────────╯` : `
+│                                         │
+│  * = elementary proficiency             │
+│                                         │
+╰─────────────────────────────────────────╯` : `
 │                                                                  │
 │  Note: * indicates elementary proficiency                       │
 │                                                                  │
@@ -371,8 +379,8 @@ Available Commands (Exploitation Tools):
     contact: () => {
       const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       let output = isMobile ? `
-╭─ CONTACT ─────────────────────────╮
-│                                   │` : `
+╭─ CONTACT ───────────────────────────────╮
+│                                         │` : `
 ╭─ CONTACT VECTORS ────────────────────────────────────────────────╮
 │                                                                  │`;
       
@@ -380,7 +388,7 @@ Available Commands (Exploitation Tools):
         if (isMobile) {
           output += `
 │  📡 ${platform}: 
-│     ${link.length > 30 ? link.substring(0, 30) + '...' : link}`;
+│     ${link}`;
         } else {
           output += `
 │  📡 ${platform}: ${link}`;
@@ -388,8 +396,8 @@ Available Commands (Exploitation Tools):
       });
       
       output += isMobile ? `
-│                                   │
-╰───────────────────────────────────╯` : `
+│                                         │
+╰─────────────────────────────────────────╯` : `
 │                                                                  │
 ╰──────────────────────────────────────────────────────────────────╯`;
       return output;
@@ -485,12 +493,42 @@ drwxr-xr-x 3 root     root     4096 Jul 28 10:29 ..
   };
 
   const handleCommand = async (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex < commandHistory.length - 1) {
+        const newIndex = historyIndex + 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+      }
+      return;
+    }
+    
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex > 0) {
+        const newIndex = historyIndex - 1;
+        setHistoryIndex(newIndex);
+        setInput(commandHistory[commandHistory.length - 1 - newIndex]);
+      } else if (historyIndex === 0) {
+        setHistoryIndex(-1);
+        setInput('');
+      }
+      return;
+    }
+
     if (e.key === 'Enter' && !isLoading) {
       const cmd = input.trim().toLowerCase();
       const fullCommand = `┌──(${username}㉿${hostname})-[${currentPath}]
 └─$ ${input}`;
       
       setLines(prev => [...prev, fullCommand]);
+      
+      // Add to command history if not empty
+      if (input.trim()) {
+        setCommandHistory(prev => [...prev, input.trim()]);
+        setHistoryIndex(-1);
+      }
+      
       setInput('');
 
       if (cmd === '') return;
@@ -523,6 +561,13 @@ drwxr-xr-x 3 root     root     4096 Jul 28 10:29 ..
     }
   };
 
+  // Click anywhere to focus input
+  const handleTerminalClick = () => {
+    if (inputRef.current && !isLoading) {
+      inputRef.current.focus();
+    }
+  };
+
   useEffect(() => {
     setLines([getWelcomeMessage()]);
   }, []);
@@ -540,12 +585,15 @@ drwxr-xr-x 3 root     root     4096 Jul 28 10:29 ..
   }, [isLoading]);
 
   return (
-    <div className="bg-black text-green-400 font-mono min-h-screen relative overflow-hidden">
-      {/* Kali Dragon Background */}
+    <div 
+      className="bg-black text-green-400 font-mono min-h-screen relative overflow-hidden cursor-text"
+      onClick={handleTerminalClick}
+    >
+      {/* Dragon Background - More visible */}
       <div 
-        className="absolute inset-0 opacity-5 bg-center bg-no-repeat bg-contain"
+        className="fixed inset-0 opacity-20 bg-center bg-no-repeat bg-contain pointer-events-none z-0"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='%2300ff00' d='M100,20 C140,20 180,60 180,100 C180,140 140,180 100,180 C60,180 20,140 20,100 C20,60 60,20 100,20 Z M100,40 C70,40 40,70 40,100 C40,130 70,160 100,160 C130,160 160,130 160,100 C160,70 130,40 100,40 Z M80,80 L120,80 L120,120 L80,120 Z'/%3E%3C/svg%3E")`
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cg fill='%2300ff41' stroke='%2300ff41' stroke-width='2'%3E%3C!-- Dragon Head --%3E%3Cellipse cx='400' cy='200' rx='80' ry='60'/%3E%3C!-- Eyes --%3E%3Ccircle cx='370' cy='180' r='8' fill='%23ff0000'/%3E%3Ccircle cx='430' cy='180' r='8' fill='%23ff0000'/%3E%3C!-- Dragon Body --%3E%3Cellipse cx='400' cy='320' rx='120' ry='80'/%3E%3C!-- Wings --%3E%3Cpath d='M280 280 Q250 250 220 280 Q250 310 280 320 Z'/%3E%3Cpath d='M520 280 Q550 250 580 280 Q550 310 520 320 Z'/%3E%3C!-- Tail --%3E%3Cpath d='M400 400 Q450 450 500 400 Q450 430 400 450' fill='none'/%3E%3C!-- Spikes --%3E%3Cpath d='M400 140 L390 120 L400 100 L410 120 Z'/%3E%3Cpath d='M380 150 L370 130 L380 110 L390 130 Z'/%3E%3Cpath d='M420 150 L430 130 L420 110 L410 130 Z'/%3E%3C/g%3E%3C/svg%3E")`
         }}
       />
       
@@ -555,7 +603,7 @@ drwxr-xr-x 3 root     root     4096 Jul 28 10:29 ..
       >
         <div className="max-w-full">
           {lines.map((line, i) => (
-            <pre key={i} className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed mb-1 break-words overflow-x-auto">
+            <pre key={i} className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed mb-1 break-words overflow-x-auto max-w-full">
               {line}
             </pre>
           ))}
@@ -591,4 +639,4 @@ drwxr-xr-x 3 root     root     4096 Jul 28 10:29 ..
   );
 };
 
-export default App;
+export default Terminal;
